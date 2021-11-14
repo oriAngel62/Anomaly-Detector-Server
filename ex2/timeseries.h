@@ -9,6 +9,7 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include "anomaly_detection_util.h"
 
 class TimeSeries
 {
@@ -18,6 +19,21 @@ public:
 	vector<string> columnNames;
 	int numOfColumn = 1;
 
+	vector<string> split(string line, string delimiter)
+	{
+		vector<string> list;
+		size_t pos = 0;
+		string token;
+		while ((pos = line.find(delimiter)) != string::npos)
+		{
+			token = line.substr(0, pos);
+			list.push_back(token);
+			line.erase(0, pos + delimiter.length());
+		}
+		list.push_back(line);
+		return list;
+	}
+
 	TimeSeries(const char *CSVfileName)
 	{
 		// File pointer
@@ -25,31 +41,29 @@ public:
 		// Open an existing file
 		f.open(CSVfileName, ios::in);
 
+		//first line
 		string line;
-		//first line insert feature
-		while (getline(f, line), ',')
+		getline(f, line);
+		columnNames = split(line, ",");				 //first line insert feature
+		for (int i = 0; i < columnNames.size(); i++) //initialized map
 		{
 			vector<float> fetureVector;
-			csv.insert({line, fetureVector});
-			columnNames.push_back(line);
+			csv.insert({columnNames[i], fetureVector});
 		}
-
-		while (!f.eof())
+		//rest of the file
+		map<string, vector<float>>::iterator it = csv.begin();
+		while (getline(f, line))
 		{
-			map<string, vector<float>>::iterator it = csv.begin();
-			while (getline(f, line), ',')
+			// getline(f, line);
+			vector<string> listOfLine;
+			listOfLine = split(line, ",");
+			for (int i = 1; i <= columnNames.size(); i++)
 			{
-				it->second.push_back(std::stof(line));
-				if (numOfColumn == csv.size())
-				{
-					numOfColumn = 1;
+				it->second.push_back(std::stof(listOfLine[i - 1]));
+				if (i == columnNames.size())
 					it = csv.begin();
-				}
 				else
-				{
-					numOfColumn++;
 					it++;
-				}
 			}
 		}
 	}
@@ -71,11 +85,13 @@ public:
 					{
 						return *vecItr;
 					}
-					findJ;
+					findJ++;
 				}
 			}
 			findI++;
 		}
+		//didnt find place in map
+		return 999;
 	}
 };
 
