@@ -17,7 +17,7 @@ class TimeSeries
 public:
 	map<string, vector<float>> csv;
 	vector<string> columnNames;
-	int numOfColumn = 1;
+	// int numOfColumn = 1;
 
 	vector<string> split(string line, string delimiter)
 	{
@@ -93,6 +93,18 @@ public:
 		//didnt find place in map
 		return 999;
 	}
+	// map<string, vector<float>> getMap()
+	// {
+	// 	return csv;
+	// }
+	// vector<string> getCloumnsNames()
+	// {
+	// 	return columnNames;
+	// }
+	// const int getNumOfCloumns()
+	// {
+	// 	return columnNames.size();
+	// }
 };
 
 #endif /* TIMESERIES_H_ */

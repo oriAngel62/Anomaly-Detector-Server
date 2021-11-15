@@ -4,7 +4,7 @@
 #include <vector>
 #include "AnomalyDetector.h"
 #include "SimpleAnomalyDetector.h"
-#include "timeseries.h"
+// #include "timeseries.h"
 #include <fstream>
 #include <stdlib.h> /* srand, rand */
 #include <time.h>	/* time */
@@ -83,18 +83,19 @@ int main()
 	float n = ts.getValFromCSV(2, 2);
 	std::cout << n;
 
-	// SimpleAnomalyDetector ad;
-	// ad.learnNormal(ts);
-	// vector<correlatedFeatures> cf = ad.getNormalModel();
+	SimpleAnomalyDetector ad;
+	ad.learnNormal(ts);
+	vector<correlatedFeatures> cf = ad.getNormalModel();
 
-	// if (cf.size() != 2)
-	// 	cout << "wrong size of correlated features (-40)" << endl;
-	// else
-	// 	for_each(cf.begin(), cf.end(), [&a1, &b1, &a2, &b2](correlatedFeatures c)
-	// 			 {
-	// 				 checkCorrelationTrain(c, "A", "C", a1, b1); // 20 points
-	// 				 checkCorrelationTrain(c, "B", "D", a2, b2); // 20 points
-	// 			 });
+	int num = 10;
+	if (cf.size() != 2)
+		cout << "wrong size of correlated features (-40)" << endl;
+	else
+		for_each(cf.begin(), cf.end(), [&a1, &b1, &a2, &b2](correlatedFeatures c)
+				 {
+					 checkCorrelationTrain(c, "A", "C", a1, b1); // 20 points
+					 checkCorrelationTrain(c, "B", "D", a2, b2); // 20 points
+				 });
 
 	// // test the anomaly detector: (60 points)
 	// // one simply anomaly is injected to the data
