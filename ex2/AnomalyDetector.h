@@ -5,10 +5,14 @@
 
 #include <string>
 #include <vector>
-#include "TimeSeries.h"
+#include "anomaly_detection_util.h"
+#include "timeseries.h"
 #include "math.h"
 using namespace std;
 
+// class TimeSeries
+// { /*...*/
+// };
 class AnomalyReport
 {
 public:

@@ -10,8 +10,6 @@ SimpleAnomalyDetector::SimpleAnomalyDetector()
 SimpleAnomalyDetector::~SimpleAnomalyDetector()
 {
 	// TODO Auto-generated destructor stub
-	// delete cf;
-	// ~TimeSeriesAnomalyDetector();
 }
 
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
@@ -101,4 +99,45 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 {
 	// TODO Auto-generated destructor stub
+	vector<AnomalyReport> anomalyReport;
+	map<string, vector<float>> csv = ts.csv;
+	vector<correlatedFeatures>::iterator it;
+	for (it = cf.begin(); it != cf.end(); it++) //iterating all corolated pairs
+	{
+		string s1 = it->feature1;
+		string s2 = it->feature2;
+		Line lin_reg = it->lin_reg;
+		float threshold = it->threshold;
+		int k = 1;
+		map<string, vector<float>>::iterator mapItrI;
+		map<string, vector<float>>::iterator mapItrJ;
+		mapItrI = csv.begin();
+		for (mapItrI = csv.begin(); mapItrI != csv.end(); ++mapItrI) //finding the right keyss for our 2 featuers
+		{
+			if (s1.compare(mapItrI->first) == 0)
+			{
+				for (mapItrJ = mapItrI; mapItrJ != csv.end(); ++mapItrJ)
+				{
+					if (s2.compare(mapItrJ->first) == 0)
+					{
+						vector<float> vI = mapItrI->second;
+						vector<float> vJ = mapItrJ->second;
+
+						vector<float>::iterator vecItrX;
+						vector<float>::iterator vecItrY;
+						vecItrY = vJ.begin();
+						for (vecItrX = vI.begin(); vecItrX != vI.end(); ++vecItrX, ++vecItrY)
+						{ //checking every line for an anomaly
+							Point p = Point(*vecItrX, *vecItrY);
+							float deviation = dev(p, lin_reg);
+							if (deviation > threshold)
+								anomalyReport.push_back(AnomalyReport(s1 + "-" + s2, k));
+							k++;
+						}
+					}
+				}
+			}
+		}
+	}
+	return anomalyReport;
 }

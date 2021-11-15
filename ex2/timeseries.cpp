@@ -1,15 +1,9 @@
 #include "timeseries.h"
-#include <string>
-#include <vector>
-
-// class TimeSeries{
+// class TimeSeries
+// {
 
 // public:
-
-//     vector<string>
-
-//     TimeSeries(const char* CSVfileName){
-
-// 	}
-
+//     TimeSeries(const char *CSVfileName)
+//     {
+//     }
 // };
