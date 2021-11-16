@@ -57,10 +57,10 @@ public:
 			// getline(f, line);
 			vector<string> listOfLine;
 			listOfLine = split(line, ",");
-			for (int i = 1; i <= columnNames.size(); i++)
+			for (int j = 0; j < columnNames.size(); j++)
 			{
-				it->second.push_back(std::stof(listOfLine[i - 1]));
-				if (i == columnNames.size())
+				it->second.push_back(std::stof(listOfLine[j]));
+				if (j == columnNames.size() - 1)
 					it = csv.begin();
 				else
 					it++;
@@ -92,6 +92,21 @@ public:
 		}
 		//didnt find place in map
 		return 999;
+	}
+	string getCoulmnName(int i)
+	{
+		int findI = 0;
+		map<string, vector<float>>::iterator mapItr;
+		for (mapItr = csv.begin(); mapItr != csv.end(); ++mapItr)
+		{
+			if (findI == i)
+			{
+				return mapItr->first;
+			}
+			findI++;
+		}
+		//didnt find place in map
+		return "";
 	}
 	// map<string, vector<float>> getMap()
 	// {
