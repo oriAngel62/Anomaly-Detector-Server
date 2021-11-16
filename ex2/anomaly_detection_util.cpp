@@ -85,7 +85,7 @@ float dev(Point p, Point **points, int size)
 	if (line.f(1) == line.f(-1) && line.f(1) == 0)
 	{
 		// std::cout << "no corolation!";
-		exit(-1);
+		return 0;
 	}
 	distance = p.y - line.f(p.x);
 	if (distance < 0)
