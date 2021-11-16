@@ -62,8 +62,8 @@ Line linear_reg(Point **points, int size)
 	float yArray[size];
 	for (int i = 0; i < size; i++)
 	{
-		xArray[i] = points[i]->x;
-		yArray[i] = points[i]->y;
+		xArray[i] = (*points)[i].x;
+		yArray[i] = (*points)[i].y;
 	}
 	corolation = pearson(xArray, yArray, size);
 	if (corolation == 0)

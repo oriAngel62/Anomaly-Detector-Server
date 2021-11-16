@@ -22,5 +22,6 @@
         "initializer_list": "cpp",
         "iostream": "cpp",
         "fstream": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -77,7 +77,7 @@ int main()
 	//	A-C: y=a1*x+b1
 	//	B-D: y=a2*x+b2
 
-	//generateTrainCSV(a1, b1, a2, b2);
+	generateTrainCSV(a1, b1, a2, b2);
 	TimeSeries ts("trainFile1.csv");
 
 	float n = ts.getValFromCSV(2, 2);
@@ -87,7 +87,6 @@ int main()
 	ad.learnNormal(ts);
 	vector<correlatedFeatures> cf = ad.getNormalModel();
 
-	int num = 10;
 	if (cf.size() != 2)
 		cout << "wrong size of correlated features (-40)" << endl;
 	else

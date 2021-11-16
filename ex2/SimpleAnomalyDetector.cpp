@@ -20,12 +20,14 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); ++mapItrI)
 	{
 		// m=coorealtion => suppose to be above 0.9?
-		int m = 0.9;
-		int c = -1;
+		float m = 0.9;
+		float c = -1;
 		// float p=0;
 		map<string, vector<float>>::iterator mapItrJ;
 
-		for (mapItrJ = next(mapItrI, 1); mapItrI != csv.end(); ++mapItrI)
+		map<string, vector<float>>::iterator mapCor1;
+		map<string, vector<float>>::iterator mapCor2;
+		for (mapItrJ = next(mapItrI, 1); mapItrJ != csv.end(); ++mapItrJ)
 		{
 			vector<float> vI = mapItrI->second;
 			vector<float> vJ = mapItrJ->second;
@@ -33,6 +35,8 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			if (p > m)
 			{
 				m = p;
+				mapCor1 = mapItrI;
+				mapCor2 = mapItrJ;
 				//c is diffrent then -1
 				c = 0;
 			}
@@ -40,44 +44,53 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 		//there is correlation
 		if (c != -1)
 		{
-			vector<float> vI = mapItrI->second;
-			vector<float> vJ = mapItrJ->second;
-			Point **points;
+			vector<float> vI = mapCor1->second;
+			vector<float> vJ = mapCor2->second;
+			Point *points;
+			// Point **toPoints = &points;
 			// vector<*point> points;
 
-			vector<float>::iterator vecItrX;
-			vector<float>::iterator vecItrY;
-			int i = 0;
-			for (vecItrX = vI.begin(); vecItrX != vI.end(); ++vecItrX)
+			//search in vector values
+			// vector<float>::iterator vecItrX;
+			// vector<float>::iterator vecItrY;
+			// int i = 0;
+			// vecItrX = vI.begin();
+			// vecItrY = vJ.begin();
+
+			for (int i = 0; i < vI.size(); i++)
 			{
+
 				// Point p = Point(*vecItrX, *vecItrY);
-				points[i]->x = *vecItrX;
-				points[i]->y = *vecItrY;
+				// float n=*vecItrX.;
+				points[i].x = vI[i];
+				points[i].y = vJ[i];
 				// m[i] = p;
-				vecItrY++;
-				i++;
+				// vecItrX++;
+				// vecItrY++;
+				// i++;
 			}
 			//make the struct
-			Line line = linear_reg(points, mapItrI->second.size());
-			string s1 = mapItrI->first;
-			string s2 = mapItrJ->first;
+
+			Line line = linear_reg(&points, mapCor1->second.size());
+			string s1 = mapCor1->first;
+			string s2 = mapCor2->first;
 			//threshold
 			float maxThreshold = 0;
-			for (int i = 0; i < mapItrI->second.size(); i++)
+			for (int i = 0; i < mapCor1->second.size(); i++)
 			{
-				int num = dev(*points[i], line);
+				float num = dev(points[i], line);
 				if (maxThreshold < num)
 				{
 					maxThreshold = num;
 				}
 			}
-			correlatedFeatures c1;
+			struct correlatedFeatures c1;
 			c1.feature1 = s1;
 			c1.feature2 = s2;
 			c1.lin_reg = line;
 			c1.threshold = maxThreshold * 1.1;
 			// correlatedFeatures c1(s1, s2, m, l, t * 1.1);
-			cf.push_back(correlatedFeatures(c1));
+			cf.push_back(c1);
 		}
 	}
 
