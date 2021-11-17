@@ -1,5 +1,10 @@
 
 
+/*
+ * animaly_detection_util.cpp
+ *
+ * Author: Ori Angel 314617739
+ */
 #ifndef TIMESERIES_H_
 #define TIMESERIES_H_
 
@@ -17,8 +22,6 @@ class TimeSeries
 public:
 	map<string, vector<float>> csv;
 	vector<string> columnNames;
-	// int numOfColumn = 1;
-
 	vector<string> split(string line, string delimiter)
 	{
 		vector<string> list;
@@ -68,6 +71,7 @@ public:
 		}
 	}
 
+	//get thr specific cell in the map
 	float getValFromCSV(int i, int j)
 	{
 		int findI = 0;
@@ -91,8 +95,9 @@ public:
 			findI++;
 		}
 		//didnt find place in map
-		return 999;
+		return 0;
 	}
+	//get the name of the cloumn
 	string getCoulmnName(int i)
 	{
 		int findI = 0;
@@ -108,18 +113,6 @@ public:
 		//didnt find place in map
 		return "";
 	}
-	// map<string, vector<float>> getMap()
-	// {
-	// 	return csv;
-	// }
-	// vector<string> getCloumnsNames()
-	// {
-	// 	return columnNames;
-	// }
-	// const int getNumOfCloumns()
-	// {
-	// 	return columnNames.size();
-	// }
 };
 
 #endif /* TIMESERIES_H_ */

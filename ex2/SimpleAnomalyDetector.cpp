@@ -1,4 +1,9 @@
 
+/*
+ * animaly_detection_util.cpp
+ *
+ * Author: Ori Angel 314617739
+ */
 #include "SimpleAnomalyDetector.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -15,20 +20,16 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector()
 
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 {
-	//cloumn B problem with ater change the mapcor1
 	// TODO Auto-generated destructor stub
 	map<string, vector<float>> csv = ts.csv;
 	map<string, vector<float>>::iterator mapItrI;
-	// int i = 0, j = 0;
 	string sF2 = "";
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); mapItrI++)
 	{
-		// m=coorealtion => suppose to be above 0.9?
+		// m=coorealtion rate
 		float m = 0.9;
 		float c = -1;
 		map<string, vector<float>>::iterator mapItrJ;
-		// map<string, vector<float>>::iterator mapCor1;
-		// map<string, vector<float>>::iterator mapCor2;
 		for (mapItrJ = next(mapItrI, 1); mapItrJ != csv.end(); mapItrJ++)
 		{
 			vector<float> vI = mapItrI->second;
@@ -37,11 +38,10 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			if (p > m)
 			{
 				m = p;
-				// mapCor1 = mapItrI;
-				// mapCor2 = mapItrJ;
-				c = 0;
-				sF2 = mapItrJ->first;
 				//c is diffrent then -1
+				c = 0;
+				//save second cor name
+				sF2 = mapItrJ->first;
 				// c = 0;
 			}
 		}
@@ -49,7 +49,6 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 		if (c != -1)
 		{
 			string f1 = mapItrI->first;
-			// string f2 = ts.getCoulmnName(j);
 			vector<float> vI = csv.find(f1)->second;
 			vector<float> vJ = csv.find(sF2)->second;
 			Point *points = (Point *)malloc(vI.size() * sizeof(Point));
@@ -81,19 +80,10 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			c1.corrlation = m;
 			c1.lin_reg = line;
 			c1.threshold = maxThreshold * 1.1;
-			// correlatedFeatures c1(s1, s2, m, l, t * 1.1);
 			cf.push_back(c1);
 		}
-		// i++;
 	}
 }
-
-// float findThreshold(Point **points)
-// {
-
-// 	float maxThreshold = 0;
-// 	for ()
-// }
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 {
@@ -111,7 +101,8 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 		map<string, vector<float>>::iterator mapItrI;
 		map<string, vector<float>>::iterator mapItrJ;
 		mapItrI = csv.begin();
-		for (mapItrI = csv.begin(); mapItrI != csv.end(); ++mapItrI) //finding the right keyss for our 2 featuers
+		//finding the right keyss for our 2 featuers
+		for (mapItrI = csv.begin(); mapItrI != csv.end(); ++mapItrI)
 		{
 			if (s1.compare(mapItrI->first) == 0)
 			{
@@ -126,7 +117,8 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 						vector<float>::iterator vecItrY;
 						vecItrY = vJ.begin();
 						for (vecItrX = vI.begin(); vecItrX != vI.end(); ++vecItrX, ++vecItrY)
-						{ //checking every line for an anomaly
+						{
+							//checking every line for an anomaly
 							Point p = Point(*vecItrX, *vecItrY);
 							float deviation = dev(p, lin_reg);
 							if (deviation > threshold)
