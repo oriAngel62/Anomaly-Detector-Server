@@ -20,7 +20,7 @@
             "name": "C/C++ Runner: Debug Session",
             "type": "cppdbg",
             "request": "launch",
-            "args": [],
+            "args": [""],
             "stopAtEntry": false,
             "cwd": "/home/ori/Desktop/advance1/ex2",
             "environment": [],
