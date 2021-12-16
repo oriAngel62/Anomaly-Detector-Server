@@ -73,33 +73,39 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 				points[i] = point;
 			}
 			// make the struct
-			Line line = linear_reg(&points, vI.size());
-			string s1 = csv.find(f1)->first;
-			string s2 = csv.find(sF2)->first;
+			correlatedFeatures c1;
 			// threshold
 			float maxThreshold = 0;
-			for (int i = 0; i < vI.size(); i++)
+			if (localShape == line)
 			{
-				float num = dev(points[i], line);
-				if (maxThreshold < num)
+				Line line = linear_reg(&points, vI.size());
+				for (int i = 0; i < vI.size(); i++)
 				{
-					maxThreshold = num;
+					float num = dev(points[i], line);
+					if (maxThreshold < num)
+					{
+						maxThreshold = num;
+					}
 				}
+				maxThreshold = maxThreshold * 1.1;
+				c1.lin_reg = line;
 			}
-			correlatedFeatures c1;
 			Circle circleObj = Circle({0, 0}, 0);
 			if (localShape == circle)
 			{
 				circleObj = findMinCircle(&points, vI.size());
 				circleObj.radius = circleObj.radius * 1.1;
+				// cirecle radius is maxthereshold
+				maxThreshold = circleObj.radius;
 				c1.circle = circleObj;
 			}
+			string s1 = csv.find(f1)->first;
+			string s2 = csv.find(sF2)->first;
 			free(points);
 			c1.feature1 = s1;
 			c1.feature2 = s2;
 			c1.corrlation = correlationRate;
-			c1.lin_reg = line;
-			c1.threshold = maxThreshold * 1.1;
+			c1.threshold = maxThreshold;
 			c1.shape = localShape;
 			cf.push_back(c1);
 		}
@@ -141,9 +147,20 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 						{
 							// checking every line for an anomaly
 							Point p = Point(*vecItrX, *vecItrY);
-							float deviation = dev(p, lin_reg);
-							if (deviation > threshold)
-								anomalyReport.push_back(AnomalyReport(s1 + "-" + s2, k));
+							if (it->shape == line)
+							{
+								float deviation = dev(p, lin_reg);
+								if (deviation > threshold)
+									anomalyReport.push_back(AnomalyReport(s1 + "-" + s2, k));
+							}
+							if (it->shape == circle)
+							{
+								// check if point is in circle
+								if (!(is_inside(it->circle, p)))
+								{
+									anomalyReport.push_back(AnomalyReport(s1 + "-" + s2, k));
+								}
+							}
 							k++;
 						}
 					}

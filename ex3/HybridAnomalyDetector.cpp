@@ -1,12 +1,12 @@
 
 #include "HybridAnomalyDetector.h"
 
-HybridAnomalyDetector::HybridAnomalyDetector() {
+HybridAnomalyDetector::HybridAnomalyDetector()
+{
 	// TODO Auto-generated constructor stub
-
 }
 
-HybridAnomalyDetector::~HybridAnomalyDetector() {
+HybridAnomalyDetector::~HybridAnomalyDetector()
+{
 	// TODO Auto-generated destructor stub
 }
-
