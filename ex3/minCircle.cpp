@@ -166,8 +166,8 @@ Circle findMinCircle(Point **points, size_t size)
     std::vector<Point> vecPoints; //(*points, *points + size);
     for (int i = 0; i < size; i++)
     {
-        vecPoints.insert(vecPoints.begin(), **points);
-        *points++;
+        Point tmpPoint = Point((*points)[i].x, (*points)[i].y);
+        vecPoints.insert(vecPoints.begin(), tmpPoint);
     }
     return finalCircle(vecPoints);
 }

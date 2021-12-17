@@ -39,8 +39,8 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			float p = abs(pearson(&vI[0], &vJ[0], vI.size()));
 			if (p >= half && p <= correlationRate)
 			{
-				correlationRate = p;
-				// c is diffrent then -1
+				// correlationRate = p;
+				//  c is diffrent then -1
 				correlationCheck = 0;
 				// save second cor name
 				sF2 = mapItrJ->first;
