@@ -1,4 +1,9 @@
 
+/*
+ * HybridAnomalyDetector.cpp
+ *
+ * Author: Ori Angel 314617739
+ */
 #include "HybridAnomalyDetector.h"
 
 HybridAnomalyDetector::HybridAnomalyDetector()

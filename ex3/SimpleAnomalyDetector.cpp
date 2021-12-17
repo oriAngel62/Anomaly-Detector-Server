@@ -28,37 +28,39 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); mapItrI++)
 	{
 		// m=coorealtion rate
-		float correlationRate = 0.9;
+		float minLineCorrelation = 0.9;
 		float half = 0.5;
 		float correlationCheck = -1;
+		float currentMax = 0;
 		map<string, vector<float>>::iterator mapItrJ;
 		for (mapItrJ = next(mapItrI, 1); mapItrJ != csv.end(); mapItrJ++)
 		{
 			vector<float> vI = mapItrI->second;
 			vector<float> vJ = mapItrJ->second;
 			float p = abs(pearson(&vI[0], &vJ[0], vI.size()));
-			if (p >= half && p <= correlationRate)
+			// find correaltion above threshold
+			if (p > half)
 			{
-				// correlationRate = p;
-				//  c is diffrent then -1
+				if (p > currentMax)
+				{
+					currentMax = p;
+					// correlationRate = p;
+					// c is diffrent then -1
+					// save second cor name
+					sF2 = mapItrJ->first;
+				}
 				correlationCheck = 0;
-				// save second cor name
-				sF2 = mapItrJ->first;
-				// c = 0;
-				localShape = circle;
-			}
-			if (p > correlationRate)
-			{
-				correlationRate = p;
-				// c is diffrent then -1
-				correlationCheck = 0;
-				// save second cor name
-				sF2 = mapItrJ->first;
-				// c = 0;
-				localShape = line;
 			}
 		}
 		// there is correlation
+		if (currentMax > half && currentMax < minLineCorrelation)
+		{
+			localShape = circle;
+		}
+		if (currentMax >= minLineCorrelation)
+		{
+			localShape = line;
+		}
 		if (correlationCheck != -1)
 		{
 			string f1 = mapItrI->first;
@@ -104,7 +106,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			free(points);
 			c1.feature1 = s1;
 			c1.feature2 = s2;
-			c1.corrlation = correlationRate;
+			c1.corrlation = minLineCorrelation;
 			c1.threshold = maxThreshold;
 			c1.shape = localShape;
 			cf.push_back(c1);
