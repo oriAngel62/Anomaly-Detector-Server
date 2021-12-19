@@ -21,15 +21,15 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 	// TODO Auto-generated destructor stub
 	map<string, vector<float>> csv = ts.csv;
 	map<string, vector<float>>::iterator mapItrI;
-	string sF2 = "";
+	string secondCorrelatedColumn = "";
 	Shape localShape = line;
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); mapItrI++)
 	{
 		// m=coorealtion rate
 		float minLineCorrelation = 0.9;
 		float half = 0.5;
-		float correlationCheck = -1;
-		float currentMax = 0;
+		float correlationCheck = false;
+		float currentMaxCorrealation = 0;
 		map<string, vector<float>>::iterator mapItrJ;
 		for (mapItrJ = next(mapItrI, 1); mapItrJ != csv.end(); mapItrJ++)
 		{
@@ -39,32 +39,31 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 			// find correaltion above threshold
 			if (p > half)
 			{
-				if (p > currentMax)
+				if (p > currentMaxCorrealation)
 				{
-					currentMax = p;
+					currentMaxCorrealation = p;
 					// save second cor name
-					sF2 = mapItrJ->first;
+					secondCorrelatedColumn = mapItrJ->first;
 				}
 				// c is diffrent then -1
-				correlationCheck = 0;
+				correlationCheck = true;
 			}
 		}
 		// there is correlation
-		if (currentMax > half && currentMax < minLineCorrelation)
+		if (currentMaxCorrealation > half && currentMaxCorrealation < minLineCorrelation)
 		{
 			localShape = circle;
 		}
-		if (currentMax >= minLineCorrelation)
+		if (currentMaxCorrealation >= minLineCorrelation)
 		{
 			localShape = line;
 		}
-		if (correlationCheck != -1)
+		if (correlationCheck)
 		{
-			string f1 = mapItrI->first;
-			vector<float> vI = csv.find(f1)->second;
-			vector<float> vJ = csv.find(sF2)->second;
+			string firstCorrelatedCloumn = mapItrI->first;
+			vector<float> vI = csv.find(firstCorrelatedCloumn)->second;
+			vector<float> vJ = csv.find(secondCorrelatedColumn)->second;
 			Point *points = (Point *)malloc(vI.size() * sizeof(Point));
-
 			for (int i = 0; i < vI.size(); i++)
 			{
 
@@ -98,17 +97,13 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 				maxThreshold = circleObj.radius;
 				c1.circle = circleObj;
 			}
-			string s1 = csv.find(f1)->first;
-			string s2 = csv.find(sF2)->first;
 			free(points);
-			c1.feature1 = s1;
-			c1.feature2 = s2;
+			c1.feature1 = csv.find(firstCorrelatedCloumn)->first;
+			c1.feature2 = csv.find(secondCorrelatedColumn)->first;
 			c1.corrlation = minLineCorrelation;
 			c1.threshold = maxThreshold;
 			c1.shape = localShape;
 			insertCorrelatedFeature(c1);
 		}
 	}
-	vector<correlatedFeatures> cf = getNormalModel();
-	int a = 10;
 }
