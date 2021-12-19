@@ -1,5 +1,5 @@
 /*
- * animaly_detection_util.cpp
+ * SimpleAnomalyDetector.h
  *
  * Author: Ori Angel 314617739
  */

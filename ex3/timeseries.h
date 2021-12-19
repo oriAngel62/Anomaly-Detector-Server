@@ -1,7 +1,7 @@
 
 
 /*
- * animaly_detection_util.cpp
+ * TimeSeries.h
  *
  * Author: Ori Angel 314617739
  */
@@ -44,16 +44,16 @@ public:
 		// Open an existing file
 		f.open(CSVfileName, ios::in);
 
-		//first line
+		// first line
 		string line;
 		getline(f, line);
-		columnNames = split(line, ",");				 //first line insert feature
-		for (int i = 0; i < columnNames.size(); i++) //initialized map
+		columnNames = split(line, ",");				 // first line insert feature
+		for (int i = 0; i < columnNames.size(); i++) // initialized map
 		{
 			vector<float> fetureVector;
 			csv.insert({columnNames[i], fetureVector});
 		}
-		//rest of the file
+		// rest of the file
 		map<string, vector<float>>::iterator it = csv.begin();
 		while (getline(f, line))
 		{
@@ -71,7 +71,7 @@ public:
 		}
 	}
 
-	//get thr specific cell in the map
+	// get thr specific cell in the map
 	float getValFromCSV(int i, int j)
 	{
 		int findI = 0;
@@ -94,10 +94,10 @@ public:
 			}
 			findI++;
 		}
-		//didnt find place in map
+		// didnt find place in map
 		return 0;
 	}
-	//get the name of the cloumn
+	// get the name of the cloumn
 	string getCoulmnName(int i)
 	{
 		int findI = 0;
@@ -110,7 +110,7 @@ public:
 			}
 			findI++;
 		}
-		//didnt find place in map
+		// didnt find place in map
 		return "";
 	}
 };
