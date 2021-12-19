@@ -23,15 +23,14 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 	// TODO Auto-generated destructor stub
 	map<string, vector<float>> csv = ts.csv;
 	map<string, vector<float>>::iterator mapItrI;
-	string sF2 = "";
+	string secondCorralatedColumn = "";
 	Shape localShape = line;
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); mapItrI++)
 	{
 		// m=coorealtion rate
 		float minLineCorrelation = 0.9;
-		float half = 0.5;
-		float correlationCheck = -1;
-		float currentMax = 0;
+		bool correlationCheck = false;
+		float currentMaxCorrelation = 0;
 		map<string, vector<float>>::iterator mapItrJ;
 		for (mapItrJ = next(mapItrI, 1); mapItrJ != csv.end(); mapItrJ++)
 		{
@@ -39,38 +38,24 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			vector<float> vJ = mapItrJ->second;
 			float p = abs(pearson(&vI[0], &vJ[0], vI.size()));
 			// find correaltion above threshold
-			if (p > half)
+			if (p > minLineCorrelation && p > currentMaxCorrelation)
 			{
-				if (p > currentMax)
-				{
-					currentMax = p;
-					// correlationRate = p;
-					// c is diffrent then -1
-					// save second cor name
-					sF2 = mapItrJ->first;
-				}
-				correlationCheck = 0;
+				currentMaxCorrelation = p;
+				// save second cor name
+				secondCorralatedColumn = mapItrJ->first;
+				// c is diffrent then -1
+				correlationCheck = true;
 			}
 		}
 		// there is correlation
-		if (currentMax > half && currentMax < minLineCorrelation)
+		if (correlationCheck)
 		{
-			localShape = circle;
-		}
-		if (currentMax >= minLineCorrelation)
-		{
-			localShape = line;
-		}
-		if (correlationCheck != -1)
-		{
-			string f1 = mapItrI->first;
-			vector<float> vI = csv.find(f1)->second;
-			vector<float> vJ = csv.find(sF2)->second;
+			string firstCorrealtedColumn = mapItrI->first;
+			vector<float> vI = csv.find(firstCorrealtedColumn)->second;
+			vector<float> vJ = csv.find(secondCorralatedColumn)->second;
 			Point *points = (Point *)malloc(vI.size() * sizeof(Point));
-
 			for (int i = 0; i < vI.size(); i++)
 			{
-
 				Point point = Point(vI[i], vJ[i]);
 				points[i] = point;
 			}
@@ -78,40 +63,30 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			correlatedFeatures c1;
 			// threshold
 			float maxThreshold = 0;
-			if (localShape == line)
+			// maxThreshold from line
+			c1.lin_reg = linear_reg(&points, vI.size());
+			for (int i = 0; i < vI.size(); i++)
 			{
-				Line line = linear_reg(&points, vI.size());
-				for (int i = 0; i < vI.size(); i++)
+				float num = dev(points[i], c1.lin_reg);
+				if (maxThreshold < num)
 				{
-					float num = dev(points[i], line);
-					if (maxThreshold < num)
-					{
-						maxThreshold = num;
-					}
+					maxThreshold = num;
 				}
-				maxThreshold = maxThreshold * 1.1;
-				c1.lin_reg = line;
 			}
-			Circle circleObj = Circle({0, 0}, 0);
-			if (localShape == circle)
-			{
-				circleObj = findMinCircle(&points, vI.size());
-				circleObj.radius = circleObj.radius * 1.1;
-				// cirecle radius is maxthereshold
-				maxThreshold = circleObj.radius;
-				c1.circle = circleObj;
-			}
-			string s1 = csv.find(f1)->first;
-			string s2 = csv.find(sF2)->first;
+			maxThreshold = maxThreshold * 1.1;
 			free(points);
-			c1.feature1 = s1;
-			c1.feature2 = s2;
-			c1.corrlation = minLineCorrelation;
+			c1.feature1 = csv.find(firstCorrealtedColumn)->first;
+			c1.feature2 = csv.find(secondCorralatedColumn)->first;
+			c1.corrlation = currentMaxCorrelation;
 			c1.threshold = maxThreshold;
 			c1.shape = localShape;
 			cf.push_back(c1);
 		}
 	}
+}
+void SimpleAnomalyDetector::insertCorrelatedFeature(correlatedFeatures c1)
+{
+	cf.push_back(c1);
 }
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
@@ -141,7 +116,6 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts)
 					{
 						vector<float> vI = mapItrI->second;
 						vector<float> vJ = mapItrJ->second;
-
 						vector<float>::iterator vecItrX;
 						vector<float>::iterator vecItrY;
 						vecItrY = vJ.begin();

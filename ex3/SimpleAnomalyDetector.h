@@ -1,5 +1,3 @@
-
-
 /*
  * animaly_detection_util.cpp
  *
@@ -40,7 +38,7 @@ public:
 
 	virtual void learnNormal(const TimeSeries &ts);
 	virtual vector<AnomalyReport> detect(const TimeSeries &ts);
-
+	void insertCorrelatedFeature(correlatedFeatures c1);
 	vector<correlatedFeatures> getNormalModel()
 	{
 		return cf;
