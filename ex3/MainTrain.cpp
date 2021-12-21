@@ -96,7 +96,7 @@ int main()
 	STDtest std("input.txt", "output.txt");
 	CLI cli(&std);
 	cli.start();
-	// std.close();
+	std.close();
 	// check("output.txt","expectedOutput.txt");
 	cout << "done" << endl;
 	return 0;

@@ -1,45 +1,45 @@
 
 
-#include "upload_command.h"
+#include "commands.h"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 
-upload_command::upload_command(DefaultIO *dio) : dio(dio) {}
+// upload_command::upload_command(DefaultIO *dio)
+// {
+//     this->dio = dio;
+// }
 
 upload_command::~upload_command()
 {
 }
 
-void upload_command::execute()
+void copyToCSV(DefaultIO *dio, string stopWord, string newFileName)
 {
-    string firstMsg = "Please upload your local train CSV file.\n";
-    string secondMsg = "Upload complete.\n";
-    string pathCSV = "anomalyTrain.csv";
-    const char comma = ',';
-    string line, word;
-    // fstream tmpf;
-    //  tmpf.open(pathCSV);
-    dio->write(firstMsg);
-    ofstream out(pathCSV);
+    // Create and open a text file
+    ofstream CSVFile; //(newFileName);
+    CSVFile.open(newFileName);
+    string line,
+        word;
     bool done = false;
-    while (done)
+    while (!done)
     {
         line = dio->read();
         // rest of the file
-        if (line.compare("done") != 0)
+        if (line.compare(stopWord) != 0)
         {
-            stringstream ss(line);
-            bool first = true;
-            while (ss >> word) // get successive words per line
-            {
-                if (!first)
-                    out << comma; // second and later words need a separator
-                out << word;
-                first = false;
-            }
-            out << '\n'; // end of line of output
+            CSVFile << line << endl;
+            // stringstream ss(line);
+            // bool first = true;
+            // while (ss >> word) // get successive words per line
+            // {
+            //     if (!first)
+            //         CSVFile << ","; // second and later words need a separator
+            //     CSVFile << word;
+            //     first = false;
+            // }
+            // // out << '\n'; // end of line of output
         }
         else
         {
@@ -48,10 +48,32 @@ void upload_command::execute()
             done = true;
         }
     }
-    dio->write(secondMsg);
-    TimeSeries ts(pathCSV);
-    out.close(pathCSV);
-    SimpleAnomalyDetector ad;
-    ad.learnNormal(ts);
+    CSVFile.close();
+}
+
+void upload_command::execute()
+{
+    string firstMsg = "Please upload your local train CSV file.\n";
+    string secondMsg = "Upload complete.\n";
+    string thirdMsg = "Please upload your local test CSV file.\n";
+    string pathCSVTrain = "anomalyTrain.csv";
+    string pathCSVTest = "anomalyTest.csv";
+    string stopWord = "done";
+    // const char comma = ',';
+    //  fstream tmpf;
+    //   tmpf.open(pathCSV);
     dio->write(firstMsg);
+    // ofstream outTrain(pathCSVTrain);
+    copyToCSV(dio, stopWord, pathCSVTrain);
+    dio->write(secondMsg); // done
+    // TimeSeries ts("anomalyTrain.csv");
+    // out.close(pathCSVTrain);
+    // HybridAnomalyDetector ad;
+    // ad.learnNormal(ts);
+    dio->write(thirdMsg);
+    copyToCSV(dio, stopWord, pathCSVTest);
+    dio->write(secondMsg); // done
+    // TimeSeries ts2("testFile1.csv");
+    // vector<AnomalyReport> r = ad.detect(ts2);
+    // to do figure how to save all the new info
 }

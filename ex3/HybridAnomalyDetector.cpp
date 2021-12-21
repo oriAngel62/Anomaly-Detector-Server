@@ -26,7 +26,6 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 	for (mapItrI = csv.begin(); mapItrI != csv.end(); mapItrI++)
 	{
 		// m=coorealtion rate
-		float minLineCorrelation = 0.9;
 		float half = 0.5;
 		float correlationCheck = false;
 		float currentMaxCorrealation = 0;
@@ -50,13 +49,16 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 			}
 		}
 		// there is correlation
-		if (currentMaxCorrealation > half && currentMaxCorrealation < minLineCorrelation)
-		{
-			localShape = circle;
-		}
-		if (currentMaxCorrealation >= minLineCorrelation)
+		if (currentMaxCorrealation >= this.minCorrelationTreshold)
 		{
 			localShape = line;
+		}
+		else
+		{
+			if (currentMaxCorrealation >= half)
+			{
+				localShape = circle;
+			}
 		}
 		if (correlationCheck)
 		{
@@ -100,7 +102,7 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 			free(points);
 			c1.feature1 = csv.find(firstCorrelatedCloumn)->first;
 			c1.feature2 = csv.find(secondCorrelatedColumn)->first;
-			c1.corrlation = minLineCorrelation;
+			c1.corrlation = currentMaxCorrealation;
 			c1.threshold = maxThreshold;
 			c1.shape = localShape;
 			insertCorrelatedFeature(c1);

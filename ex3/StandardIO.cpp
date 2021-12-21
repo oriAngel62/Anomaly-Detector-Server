@@ -5,44 +5,61 @@
  */
 #include "StandardIO.h"
 #include <iostream>
-#include <string>
+#include <string.h>
 #include <fstream>
 #include <sstream>
 
-StandardIO::StandardIO()
+class StandardIO : public DefaultIO
 {
-}
+    fstream fI;
+    fstream fO;
 
-StandardIO::~StandardIO()
-{
-}
-
-void StandardIO::write(string text)
-{
-}
-
-string read()
-{
-    // File pointer
-    fstream f;
-    // Open an existing file
-    f.open("input.txt", ios::in);
-    // first line
-    if (f.is_open())
+public:
+    StandardIO(string inputFile, string outputFile)
     {
-        string oneLine;
-        getline(f, oneLine);
-        f.close();
-        return oneLine;
+        fI.open(inputFile);
+        fO.open(outputFile);
+    }
+    virtual string read()
+    {
+        string s;
+        fI >> s;
+        return s;
+    }
+    virtual void write(string text)
+    {
+        fO << text;
     }
 
-    // int indexMenu = stoi(firstLine);
-    // if (indexMenu != 1)
-    // {
-    //     exit(1);
-    // }
-    // else
-    // {
-    //     execute();
-    // }
-}
+    virtual void write(float f)
+    {
+        fO << f;
+    }
+
+    virtual void read(float *f)
+    {
+        fI >> *f;
+    }
+
+    void close()
+    {
+        if (fI.is_open())
+            fI.close();
+        if (fO.is_open())
+            fO.close();
+    }
+    ~StandardIO()
+    {
+        close();
+    }
+};
+
+// int indexMenu = stoi(firstLine);
+// if (indexMenu != 1)
+// {
+//     exit(1);
+// }
+// else
+// {
+//     execute();
+// }

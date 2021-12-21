@@ -3,7 +3,7 @@
 #ifndef CLI_H_
 #define CLI_H_
 
-#include <string.h>
+// #include <string.h>
 #include "commands.h"
 
 using namespace std;
@@ -17,7 +17,7 @@ public:
 	CLI(DefaultIO *dio);
 	void start();
 	virtual ~CLI();
-
+	void printMenu();
 	void readCsv();
 };
 

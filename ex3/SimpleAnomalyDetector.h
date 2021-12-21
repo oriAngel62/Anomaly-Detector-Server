@@ -31,11 +31,13 @@ struct correlatedFeatures
 class SimpleAnomalyDetector : public TimeSeriesAnomalyDetector
 {
 	vector<correlatedFeatures> cf;
+	float minCorrelationTreshold = 0.9;
 
 public:
 	SimpleAnomalyDetector();
 	virtual ~SimpleAnomalyDetector();
-
+	virtual void setMinTreshold(float treshold);
+	virtual float getMinTreshold();
 	virtual void learnNormal(const TimeSeries &ts);
 	virtual vector<AnomalyReport> detect(const TimeSeries &ts);
 	void insertCorrelatedFeature(correlatedFeatures c1);
