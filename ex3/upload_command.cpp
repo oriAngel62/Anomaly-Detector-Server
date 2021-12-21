@@ -30,17 +30,7 @@ void copyToCSV(DefaultIO *dio, string stopWord, string newFileName)
         if (line.compare(stopWord) != 0)
         {
             CSVFile << line << endl;
-            // stringstream ss(line);
-            // bool first = true;
-            // while (ss >> word) // get successive words per line
-            // {
-            //     if (!first)
-            //         CSVFile << ","; // second and later words need a separator
-            //     CSVFile << word;
-            //     first = false;
-            // }
-            // // out << '\n'; // end of line of output
-        }
+                }
         else
         {
             // end with creating the csv file
@@ -63,16 +53,16 @@ void upload_command::execute()
     //  fstream tmpf;
     //   tmpf.open(pathCSV);
     dio->write(firstMsg);
-    // ofstream outTrain(pathCSVTrain);
     copyToCSV(dio, stopWord, pathCSVTrain);
     dio->write(secondMsg); // done
+    dio->write(thirdMsg);
+    copyToCSV(dio, stopWord, pathCSVTest);
+    dio->write(secondMsg); // done
+    // ofstream outTrain(pathCSVTrain);
     // TimeSeries ts("anomalyTrain.csv");
     // out.close(pathCSVTrain);
     // HybridAnomalyDetector ad;
     // ad.learnNormal(ts);
-    dio->write(thirdMsg);
-    copyToCSV(dio, stopWord, pathCSVTest);
-    dio->write(secondMsg); // done
     // TimeSeries ts2("testFile1.csv");
     // vector<AnomalyReport> r = ad.detect(ts2);
     // to do figure how to save all the new info

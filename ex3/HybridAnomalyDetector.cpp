@@ -49,7 +49,7 @@ void HybridAnomalyDetector::learnNormal(const TimeSeries &ts)
 			}
 		}
 		// there is correlation
-		if (currentMaxCorrealation >= this.minCorrelationTreshold)
+		if (currentMaxCorrealation >= getMinTreshold())
 		{
 			localShape = line;
 		}

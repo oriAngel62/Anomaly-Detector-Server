@@ -7,7 +7,7 @@
 #define SIMPLEANOMALYDETECTOR_H_
 #include "anomaly_detection_util.h"
 #include "AnomalyDetector.h"
-#include <vector>
+// #include <vector>
 #include <algorithm>
 #include <string.h>
 #include <math.h>

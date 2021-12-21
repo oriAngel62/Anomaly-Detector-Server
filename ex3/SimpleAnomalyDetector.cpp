@@ -20,7 +20,7 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector()
 
 float SimpleAnomalyDetector::getMinTreshold()
 {
-	return this.minCorrelationTreshold;
+	return minCorrelationTreshold;
 }
 
 void SimpleAnomalyDetector::setMinTreshold(float treshold)
@@ -48,7 +48,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts)
 			vector<float> vJ = mapItrJ->second;
 			float p = abs(pearson(&vI[0], &vJ[0], vI.size()));
 			// find correaltion above threshold
-			if (p > this.minCorrelationTreshold && p > currentMaxCorrelation)
+			if (p > this->minCorrelationTreshold && p > currentMaxCorrelation)
 			{
 				currentMaxCorrelation = p;
 				// save second cor name

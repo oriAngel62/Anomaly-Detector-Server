@@ -1,5 +1,4 @@
 #include "CLI.h"
-#include <iostream>
 #include <string.h>
 #include <fstream>
 #include <sstream>
@@ -7,16 +6,22 @@
 CLI::CLI(DefaultIO *dio)
 {
     this->dio = dio;
-    this->commands.push_back(new upload_command(dio));
-
-    // this->commands = Command(dio);
+    // this->sharedAnomalyDetector = had;
+    // HybridAnomalyDetector *detector = new HybridAnomalyDetector();
+    // this->sharedAnomalyDetector(new HybridAnomalyDetector());
+    HybridAnomalyDetector p = HybridAnomalyDetector();
+    HybridAnomalyDetector &referenceToDetector = p;
+    this->commands.push_back(new upload_command(dio, referenceToDetector));
+    this->commands.push_back(new get_set_treshold(dio, referenceToDetector));
+    this->commands.push_back(new anomaly_detection_command(dio, referenceToDetector));
+    this->commands.push_back(new anomaly_report_command(dio, referenceToDetector));
 }
 
 void CLI::printMenu()
 {
 
     string line1 = "Welcome to the Anomaly Detection Server.\n";
-    string line2 = "Please choose an option :\n";
+    string line2 = "Please choose an option:\n";
     string line3 = "1.upload a time series csv file\n";
     string line4 = "2.algorithm settings\n";
     string line5 = "3.detect anomalies\n";
@@ -44,12 +49,24 @@ void CLI::start()
         {
         case 1:
             commands[0]->execute();
-            return;
+            break;
+        case 2:
+            commands[1]->execute();
+            break;
+        case 3:
+            commands[2]->execute();
+            break;
+        case 4:
+            commands[3]->execute();
+            break;
         case 6:
-            return;
+            break;
         default:
             return;
         }
+        printMenu();
+        line = dio->read();
+        numOfUsersOption = stoi(line);
     }
 
     dio->close();

@@ -1,5 +1,5 @@
 Welcome to the Anomaly Detection Server.
-Please choose an option :
+Please choose an option:
 1.upload a time series csv file
 2.algorithm settings
 3.detect anomalies
@@ -10,3 +10,39 @@ Please upload your local train CSV file.
 Upload complete.
 Please upload your local test CSV file.
 Upload complete.
+Welcome to the Anomaly Detection Server.
+Please choose an option:
+1.upload a time series csv file
+2.algorithm settings
+3.detect anomalies
+4.display results
+5.upload anomalies and analyze results
+6.exit
+The current correlation threshold is 0.900000
+Type a new threshold
+Welcome to the Anomaly Detection Server.
+Please choose an option:
+1.upload a time series csv file
+2.algorithm settings
+3.detect anomalies
+4.display results
+5.upload anomalies and analyze results
+6.exit
+73	A-B74	A-B75	A-B76	A-B133	C-D134	C-D135	C-D8	E-F9	E-F10	E-F11	E-Fanomaly detection complete.
+Welcome to the Anomaly Detection Server.
+Please choose an option:
+1.upload a time series csv file
+2.algorithm settings
+3.detect anomalies
+4.display results
+5.upload anomalies and analyze results
+6.exit
+Done
+Welcome to the Anomaly Detection Server.
+Please choose an option:
+1.upload a time series csv file
+2.algorithm settings
+3.detect anomalies
+4.display results
+5.upload anomalies and analyze results
+6.exit
