@@ -12,7 +12,7 @@ using namespace std;
 class CLI
 {
 	DefaultIO *dio;
-	HybridAnomalyDetector sharedAnomalyDetector;
+	HybridAnomalyDetector *sharedAnomalyDetector;
 	//  this->sharedAnomalyDetector(new HybridAnomalyDetector());
 
 	vector<Command *> commands;

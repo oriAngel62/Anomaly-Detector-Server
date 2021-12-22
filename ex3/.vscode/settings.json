@@ -22,6 +22,8 @@
         "memory_resource": "cpp",
         "streambuf": "cpp",
         "exception": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "initializer_list": "cpp",
+        "array": "cpp"
     }
 }

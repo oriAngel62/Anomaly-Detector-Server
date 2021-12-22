@@ -9,12 +9,12 @@ CLI::CLI(DefaultIO *dio)
     // this->sharedAnomalyDetector = had;
     // HybridAnomalyDetector *detector = new HybridAnomalyDetector();
     // this->sharedAnomalyDetector(new HybridAnomalyDetector());
-    HybridAnomalyDetector p = HybridAnomalyDetector();
-    HybridAnomalyDetector &referenceToDetector = p;
-    this->commands.push_back(new upload_command(dio, referenceToDetector));
-    this->commands.push_back(new get_set_treshold(dio, referenceToDetector));
-    this->commands.push_back(new anomaly_detection_command(dio, referenceToDetector));
-    this->commands.push_back(new anomaly_report_command(dio, referenceToDetector));
+    HybridAnomalyDetector *ptrToDetector = new HybridAnomalyDetector();
+    this->commands.push_back(new upload_command(dio, ptrToDetector));
+    this->commands.push_back(new get_set_treshold(dio, ptrToDetector));
+    this->commands.push_back(new anomaly_detection_command(dio, ptrToDetector));
+    this->commands.push_back(new anomaly_report_command(dio, ptrToDetector));
+    this->commands.push_back(new upload_and_analyze_command(dio, ptrToDetector));
 }
 
 void CLI::printMenu()
@@ -59,8 +59,11 @@ void CLI::start()
         case 4:
             commands[3]->execute();
             break;
-        case 6:
+        case 5:
+            commands[4]->execute();
             break;
+        case 6:
+            return;
         default:
             return;
         }
