@@ -63,6 +63,7 @@ void CLI::start()
             commands[4]->execute();
             break;
         case 6:
+            // ~CLI();
             return;
         default:
             return;
@@ -76,4 +77,9 @@ void CLI::start()
 }
 CLI::~CLI()
 {
+    // for (int i = 0; i < 5; i++)
+    // {
+    //     commands[i].delete();
+    // }
+    // *(this.ptrToDetector).delete();
 }

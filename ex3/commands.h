@@ -50,7 +50,9 @@ protected:
 public:
 	Command(DefaultIO *dio, HybridAnomalyDetector *had) : dio(dio), sharedDetector(had){};
 	virtual void execute() = 0;
-	virtual ~Command() {}
+	virtual ~Command()
+	{
+	}
 };
 
 class upload_command : public Command
@@ -161,7 +163,7 @@ public:
 		// 	string s2 = ar[i].description;
 		// 	dio->write(s1 + "\t" + s2);
 		// }
-		// dio->write(endCommand);
+		dio->write(endCommand);
 		// TimeSeries tsTest("anomalyTest.csv");
 		// sharedDetector.detect(tsTest);
 		// dio->write(endCommand);
@@ -371,12 +373,19 @@ public:
 			}
 		}
 		// String.format("%.2f", a)
+
+		float f1 = (TPCount * 1000) / P;
+		float f2 = (FPCount * 1000) / N;
+		f1 = floor(f1);
+		f2 = floor(f2);
+		f1 = f1 / 1000;
+		f2 = f2 / 1000;
 		double t = ((double)TPCount / (double)P) * 1000.0;
 		double TPRate = (double)trunc(t) / 1000.0;
 		t = ((double)FPCount / (double)N) * 1000.0;
 		double FPRate = (double)trunc(t) / 1000.0;
-		dio->write(positiveRateMsg + to_string(TPRate) + "\n");
-		dio->write(negativeRateMsg + to_string(FPRate) + "\n");
+		dio->write(positiveRateMsg + to_string(f1) + "\n");
+		dio->write(negativeRateMsg + to_string(f2) + "\n");
 	}
 
 	virtual void execute()
@@ -395,6 +404,38 @@ public:
 		int a = 10;
 	}
 };
+
+// string cutString(string s)
+// {
+// 	bool dot = flase;
+// 	int indexDot = 0;
+// 	string newS = "";
+// 	int count = 0;
+// 	for (int i = 0; i < s.length(); i++)
+// 	{
+// 		if (s[i] == ".")
+// 		{
+// 			dot = true;
+// 			indexDot = i;
+// 		}
+// 		newS = newS + s[i];
+// 	}
+// 	if (!dot)
+// 	{
+// 		return newS;
+// 	}
+// 	else
+// 	{
+// 		for (int i = s.length(); i < indexDot; i--)
+// 		{
+// 			if (s[i] == "0")
+// 			{
+// 				count++;
+// 			}
+// 		}
+// 		s = s.substring(0, s.length() - 1 + count);
+// 	}
+// }
 
 //
 
