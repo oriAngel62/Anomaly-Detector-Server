@@ -30,16 +30,6 @@ void copyToCSV(DefaultIO *dio, string stopWord, string newFileName)
         if (line.compare(stopWord) != 0)
         {
             CSVFile << line << endl;
-            // stringstream ss(line);
-            // bool first = true;
-            // while (ss >> word) // get successive words per line
-            // {
-            //     if (!first)
-            //         CSVFile << ","; // second and later words need a separator
-            //     CSVFile << word;
-            //     first = false;
-            // }
-            // // out << '\n'; // end of line of output
         }
         else
         {

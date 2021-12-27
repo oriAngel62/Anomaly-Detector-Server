@@ -72,7 +72,6 @@ void CLI::start()
         line = dio->read();
         numOfUsersOption = stoi(line);
     }
-
     dio->close();
 }
 CLI::~CLI()

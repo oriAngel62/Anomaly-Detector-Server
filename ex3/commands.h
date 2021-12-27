@@ -50,8 +50,45 @@ protected:
 public:
 	Command(DefaultIO *dio, HybridAnomalyDetector *had) : dio(dio), sharedDetector(had){};
 	virtual void execute() = 0;
+
 	virtual ~Command()
 	{
+	}
+	string cutString(string s)
+	{
+		bool dot = false;
+		int indexDot = 0;
+		int count = 0;
+		// check if dot
+		indexDot = s.find('.');
+		if (indexDot < 0)
+		{
+			return s;
+		}
+		else
+		{
+			int countDeciminal = s.length() - indexDot - 1;
+			if (countDeciminal > 3)
+			{
+				s = s.substr(0, indexDot + 4);
+			}
+			int i = s.length() - 1;
+
+			while (s[i] == '0')
+			{
+				count++;
+				i--;
+			}
+			if (count == 3)
+			{
+				s = s.substr(0, s.length() - count - 1);
+			}
+			else
+			{
+				s = s.substr(0, s.length() - count);
+			}
+		}
+		return s;
 	}
 };
 
@@ -122,7 +159,7 @@ public:
 		float numChosen;
 		string value;
 		float i = sharedDetector->getMinTreshold();
-		string minTresholdStr(to_string(i));
+		string minTresholdStr(cutString(to_string(i)));
 		string str1 = "The current correlation threshold is ";
 		string str2 = "Type a new threshold\n";
 		str1.append(minTresholdStr);
@@ -372,20 +409,9 @@ public:
 				TPCount++;
 			}
 		}
-		// String.format("%.2f", a)
 
-		float f1 = (TPCount * 1000) / P;
-		float f2 = (FPCount * 1000) / N;
-		f1 = floor(f1);
-		f2 = floor(f2);
-		f1 = f1 / 1000;
-		f2 = f2 / 1000;
-		double t = ((double)TPCount / (double)P) * 1000.0;
-		double TPRate = (double)trunc(t) / 1000.0;
-		t = ((double)FPCount / (double)N) * 1000.0;
-		double FPRate = (double)trunc(t) / 1000.0;
-		dio->write(positiveRateMsg + to_string(f1) + "\n");
-		dio->write(negativeRateMsg + to_string(f2) + "\n");
+		dio->write(positiveRateMsg + cutString(to_string((double)TPCount / (double)P)) + "\n");
+		dio->write(negativeRateMsg + cutString(to_string((double)FPCount / (double)N)) + "\n");
 	}
 
 	virtual void execute()
@@ -404,39 +430,5 @@ public:
 		int a = 10;
 	}
 };
-
-// string cutString(string s)
-// {
-// 	bool dot = flase;
-// 	int indexDot = 0;
-// 	string newS = "";
-// 	int count = 0;
-// 	for (int i = 0; i < s.length(); i++)
-// 	{
-// 		if (s[i] == ".")
-// 		{
-// 			dot = true;
-// 			indexDot = i;
-// 		}
-// 		newS = newS + s[i];
-// 	}
-// 	if (!dot)
-// 	{
-// 		return newS;
-// 	}
-// 	else
-// 	{
-// 		for (int i = s.length(); i < indexDot; i--)
-// 		{
-// 			if (s[i] == "0")
-// 			{
-// 				count++;
-// 			}
-// 		}
-// 		s = s.substring(0, s.length() - 1 + count);
-// 	}
-// }
-
-//
 
 #endif /* COMMANDS_H_ */

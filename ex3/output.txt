@@ -18,7 +18,7 @@ Please choose an option:
 4.display results
 5.upload anomalies and analyze results
 6.exit
-The current correlation threshold is 0.900000
+The current correlation threshold is 0.9
 Type a new threshold
 Welcome to the Anomaly Detection Server.
 Please choose an option:
@@ -59,8 +59,8 @@ Please choose an option:
 6.exit
 Please upload your local anomalies file.
 Upload complete.
-True Positive Rate: 0.000000
-False Positive Rate: 0.015000
+True Positive Rate: 0
+False Positive Rate: 0.015
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -71,8 +71,8 @@ Please choose an option:
 6.exit
 Please upload your local anomalies file.
 Upload complete.
-True Positive Rate: 0.500000
-False Positive Rate: 0.010000
+True Positive Rate: 0.5
+False Positive Rate: 0.01
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -83,8 +83,8 @@ Please choose an option:
 6.exit
 Please upload your local anomalies file.
 Upload complete.
-True Positive Rate: 1.000000
-False Positive Rate: 0.010000
+True Positive Rate: 1
+False Positive Rate: 0.01
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -95,8 +95,8 @@ Please choose an option:
 6.exit
 Please upload your local anomalies file.
 Upload complete.
-True Positive Rate: 1.000000
-False Positive Rate: 0.005000
+True Positive Rate: 1
+False Positive Rate: 0.005
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
@@ -107,8 +107,8 @@ Please choose an option:
 6.exit
 Please upload your local anomalies file.
 Upload complete.
-True Positive Rate: 1.000000
-False Positive Rate: 0.000000
+True Positive Rate: 1
+False Positive Rate: 0
 Welcome to the Anomaly Detection Server.
 Please choose an option:
 1.upload a time series csv file
