@@ -1,3 +1,8 @@
+/*
+ * CLI.cpp
+ *
+ * Author: Ori Angel 314617739
+ */
 #include "CLI.h"
 #include <string.h>
 #include <fstream>
@@ -6,9 +11,6 @@
 CLI::CLI(DefaultIO *dio)
 {
     this->dio = dio;
-    // this->sharedAnomalyDetector = had;
-    // HybridAnomalyDetector *detector = new HybridAnomalyDetector();
-    // this->sharedAnomalyDetector(new HybridAnomalyDetector());
     HybridAnomalyDetector *ptrToDetector = new HybridAnomalyDetector();
     this->commands.push_back(new upload_command(dio, ptrToDetector));
     this->commands.push_back(new get_set_treshold(dio, ptrToDetector));
@@ -63,7 +65,6 @@ void CLI::start()
             commands[4]->execute();
             break;
         case 6:
-            // ~CLI();
             return;
         default:
             return;
@@ -76,9 +77,4 @@ void CLI::start()
 }
 CLI::~CLI()
 {
-    // for (int i = 0; i < 5; i++)
-    // {
-    //     commands[i].delete();
-    // }
-    // *(this.ptrToDetector).delete();
 }

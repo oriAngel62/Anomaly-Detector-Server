@@ -1,5 +1,10 @@
 
 
+/*
+ * commands.h
+ *
+ * Author: Ori Angel 314617739
+ */
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
@@ -28,24 +33,11 @@ struct startAndEndTime
 	int start, end;
 };
 
-// you may add additional methods here
-// implement here your command classes
-// class share_command
-// {
-// public:
-// 	shared_ptr<HybridAnomalyDetector> shareAnomalyDetector;
-// };
-// };
-
-// you may add here helper classes
-
-// you may edit this class
 class Command
 {
 protected:
 	DefaultIO *dio;
 	HybridAnomalyDetector *sharedDetector;
-	// shared_ptr<HybridAnomalyDetector> sharedAnomalyDetector;
 
 public:
 	Command(DefaultIO *dio, HybridAnomalyDetector *had) : dio(dio), sharedDetector(had){};
@@ -54,12 +46,14 @@ public:
 	virtual ~Command()
 	{
 	}
+
+	// auxiliary function that cuts a float to only 3 digits after the decimal point
 	string cutString(string s)
 	{
 		bool dot = false;
 		int indexDot = 0;
 		int count = 0;
-		// check if dot
+		// check if dot exists
 		indexDot = s.find('.');
 		if (indexDot < 0)
 		{
@@ -92,14 +86,11 @@ public:
 	}
 };
 
-class upload_command : public Command
+class upload_command : public Command // function 1 in menu
 {
 public:
 	// DefaultIO *dio;
-	upload_command(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had){
-																	 // this->dio = dio;
-
-																 };
+	upload_command(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had){};
 
 	void copyToCSV(DefaultIO *dio, string stopWord, string newFileName)
 	{
@@ -134,9 +125,6 @@ public:
 		string pathCSVTrain = "anomalyTrain.csv";
 		string pathCSVTest = "anomalyTest.csv";
 		string stopWord = "done";
-		// const char comma = ',';
-		//  fstream tmpf;
-		//   tmpf.open(pathCSV);
 		dio->write(firstMsg);
 		copyToCSV(dio, stopWord, pathCSVTrain);
 		dio->write(secondMsg); // done
@@ -146,12 +134,12 @@ public:
 	}
 };
 
-class get_set_treshold : public Command
+class get_set_treshold : public Command // function 2 in menu
 {
 public:
 	// DefaultIO *dio;
 	get_set_treshold(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had){
-																	   // this->dio = dio;
+
 																   };
 
 	virtual void execute()
@@ -179,7 +167,7 @@ public:
 	}
 };
 
-class anomaly_detection_command : public Command
+class anomaly_detection_command : public Command // function 3 in menu
 {
 public:
 	anomaly_detection_command(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had)
@@ -190,24 +178,11 @@ public:
 		string endCommand = "anomaly detection complete.\n";
 		TimeSeries tsTrain("anomalyTrain.csv");
 		sharedDetector->learnNormal(tsTrain);
-
-		// // suppose to be in anomal detector command
-		// TimeSeries tsTest("anomalyTest.csv");
-		// vector<AnomalyReport> ar = sharedDetector->detect(tsTest);
-		// for (int i = 0; i < ar.size(); i++)
-		// {
-		// 	string s1 = to_string(ar[i].timeStep);
-		// 	string s2 = ar[i].description;
-		// 	dio->write(s1 + "\t" + s2);
-		// }
 		dio->write(endCommand);
-		// TimeSeries tsTest("anomalyTest.csv");
-		// sharedDetector.detect(tsTest);
-		// dio->write(endCommand);
 	}
 };
 
-class anomaly_report_command : public Command
+class anomaly_report_command : public Command // function 4 in menu
 {
 public:
 	anomaly_report_command(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had)
@@ -232,12 +207,11 @@ public:
 	}
 };
 
-class upload_and_analyze_command : public Command
+class upload_and_analyze_command : public Command // function 5 in menu
 {
 public:
 	// DefaultIO *dio;
 	upload_and_analyze_command(DefaultIO *dio, HybridAnomalyDetector *had) : Command(dio, had){
-																				 // this->dio = dio;
 
 																			 };
 

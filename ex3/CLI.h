@@ -1,5 +1,10 @@
 
 
+/*
+ * CLI.h
+ *
+ * Author: Ori Angel 314617739
+ */
 #ifndef CLI_H_
 #define CLI_H_
 
@@ -13,10 +18,8 @@ class CLI
 {
 	DefaultIO *dio;
 	HybridAnomalyDetector *sharedAnomalyDetector;
-	//  this->sharedAnomalyDetector(new HybridAnomalyDetector());
-
 	vector<Command *> commands;
-	// you can add data members
+
 public:
 	CLI(DefaultIO *dio);
 	void start();

@@ -15,9 +15,6 @@
 #include "math.h"
 using namespace std;
 
-// class TimeSeries
-// { /*...*/
-// };
 class AnomalyReport
 {
 public:
