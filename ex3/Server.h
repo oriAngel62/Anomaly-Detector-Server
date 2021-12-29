@@ -1,3 +1,8 @@
+/*
+ * Server.h
+ *
+ * Author: Ori Angel 314617739
+ */
 #include <pthread.h>
 #include <thread>
 #include <netinet/in.h>
@@ -6,8 +11,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "CLI.h"
-// #include <signal.h>
-// #include <sstream>
 
 #ifndef SERVER_H_
 #define SERVER_H_
@@ -40,13 +43,13 @@ public:
 	void start(ClientHandler &ch) throw(const char *);
 	void stop();
 };
-// you may add data members
+// socket class
 class SocketIO : public DefaultIO
 {
-	int clientID;
+	int clientKey;
 
 public:
-	SocketIO(int clientID) : clientID(clientID) {}
+	SocketIO(int clientID) : clientKey(clientID) {}
 
 	virtual string read()
 	{
@@ -54,7 +57,7 @@ public:
 		char everyLetter = 'a';
 		while (everyLetter != '\n')
 		{
-			recv(clientID, &everyLetter, sizeof(char), 0);
+			recv(clientKey, &everyLetter, sizeof(char), 0);
 			message += everyLetter;
 		}
 		return message;
@@ -62,7 +65,7 @@ public:
 	virtual void write(string text)
 	{
 		const char *message = text.c_str(); // not percise need to check
-		send(clientID, message, strlen(message), 0);
+		send(clientKey, message, strlen(message), 0);
 	}
 	virtual void write(float f)
 	{
