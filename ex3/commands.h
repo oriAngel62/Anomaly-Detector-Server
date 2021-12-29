@@ -106,7 +106,7 @@ public:
 			// rest of the file
 			if (line.compare(stopWord) != 0)
 			{
-				CSVFile << line << endl;
+				CSVFile << line;
 			}
 			else
 			{
@@ -124,7 +124,7 @@ public:
 		string thirdMsg = "Please upload your local test CSV file.\n";
 		string pathCSVTrain = "anomalyTrain.csv";
 		string pathCSVTest = "anomalyTest.csv";
-		string stopWord = "done";
+		string stopWord = "done\n";
 		dio->write(firstMsg);
 		copyToCSV(dio, stopWord, pathCSVTrain);
 		dio->write(secondMsg); // done
@@ -221,7 +221,7 @@ public:
 		string line, firstVal, secondVal;
 
 		TimeSeries tsSupport("anomalyTest.csv");
-		string stopWord = "done";
+		string stopWord = "done\n";
 		vector<startAndEndTime> allTimes;
 		vector<string> strTimes;
 		bool done = false;

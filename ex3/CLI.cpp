@@ -75,6 +75,11 @@ void CLI::start()
     }
     dio->close();
 }
+
 CLI::~CLI()
 {
+    for (int i = 0; i < commands.size(); i++)
+    {
+        delete commands[i];
+    }
 }
