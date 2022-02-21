@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/home/ori/Desktop/advance1/ex2/a.out",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "C/C++ Runner: Debug Session",
+            "type": "cppdbg",
+            "request": "launch",
+            "args": [""],
+            "stopAtEntry": false,
+            "cwd": "/home/ori/Desktop/advance1/ex2",
+            "environment": [],
+            "program": "/home/ori/Desktop/advance1/ex2/a.out",
+            "internalConsoleOptions": "openOnSessionStart",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "externalConsole": false,
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
